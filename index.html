@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Twitter participants</title>
+            <!-- ------------------------CSS-------------------------- -->
+    <style>
+    #code{
+        position: absolute;
+        right:0;
+        top:0;
+        max-width: 50%;;
+        border: 1px solid green;
+    }
+    #container{
+        display: flex;
+        border: 1px solid blue;
+        margin: 1%;
+    }
+    #searchString{
+        margin: 2%;
+        min-height: 100px;
+        width: 30%;
+        border: 1px solid green;
+    }
+    #startDay{
+        margin: 2%;
+        min-height: 100px;
+        width: 30%;
+        border: 1px solid green;
+    }
+    #endDay{
+        margin: 2%;
+        min-height: 100px;
+        width: 30%;
+        border: 1px solid green;
+    }
+    #range{
+        margin: 2%;
+        min-height: 100px;
+        width: 30%;
+        border: 1px solid green;
+    }
+    </style>
+</head>
+<body>
+    
+    <!-- ------------------------HTML-------------------------- -->
+    <h2>number:</h2>
+    <input id ="number"></input>
+    <h2>day (YYYY-MM-DD)<span style = "font-size: .5em;">(include leading zeros)</span>:</h2>
+    <input id ="day"></input>
+
+    <h2>Custom day range:</h2>
+    <h3>Day's after day (YYYY-MM-DD)<span style = "font-size: .5em;">(include leading zeros)</span>:</h3>
+    <input id ="rangeDays"></input>
+
+    <button id="submit">submit</button>
+    <hr>
+    <h3>Strings Queries</h3>
+    <div id="code"><h4>Code</h4><span style = "font-size: .8em;">After you search your string query in twitter, scroll down so all the tweets load. Then copy this code and run in your web inspector console. The result should be a string that contins an array of twitter accounts. Copy the array and paste it somewhere, removing the extra quotes outside the brackets.:</span><hr></div>
+    <div id="container">
+        <div id="searchString"><h4>Day</h4><hr><div class="string"></div></div>
+        <div id="startDay"><h4>Start Day</h4><hr><div class="string"></div></div>
+        <div id="endDay"><h4>End Day</h4><hr><div class="string"></div></div>
+
+        <div id="range"><h4>Custom Range</h4><hr><div class="string"></div></div>
+    </div>
+
+    <!-- ------------------------script-------------------------- -->
+    
+    <script type = "text/javascript">
+    const code = "tweets = document.querySelectorAll(\".tweet.js-stream-tweet\");\r\n    var names = [];\r\n    for (i=0; i<\r\ntweets.length; i++){\r\n        names.push(tweets[i].dataset.screenName);\r\n JSON.stringify(names);   } ";
+    const codeDiv = document.getElementById("code");
+    const startDayDiv = document.querySelector("#startDay .string");
+    const endDayDiv = document.querySelector("#endDay .string");
+    const searchStringDiv = document.querySelector("#searchString .string");
+    const range = document.querySelector("#range .string");
+    codeDiv.innerHTML += code;
+    
+    
+    
+    let obj;
+    const callMakeObject = ()=>(makeObject(document.querySelector("#number").value, document.querySelector("#day").value, document.querySelector("#rangeDays").value));
+    
+    const makeObject = (number, day, rangeDays = "")=>{
+
+
+
+        resetDivs();
+        obj = {};
+        //getting values
+        obj.number = number;
+        obj.dayString = day;
+        obj.rangeDays = rangeDays;
+        
+        obj.date = new Date(obj.dayString+"T12:00:00");
+        
+        obj.lastDayString = function lastDayString(date, days=1){
+            lastDay = new Date(date);
+            lastDay.setDate(date.getDate()+parseInt(days));  
+            return makeStringFromDate(lastDay);
+        }
+        
+        obj.startDay = new Date(obj.date);
+        obj.endDay = new Date(obj.date);
+
+        obj.startDay.setDate(obj.date.getDate()-(parseInt(obj.number)-1));
+        obj.endDay.setDate(obj.date.getDate()+(100-parseInt(obj.number)));
+        
+
+        obj.startDayString = makeStringFromDate(obj.startDay);
+        obj.endDayString = makeStringFromDate(obj.endDay);
+
+
+
+        obj.day_searchString = searchString(obj.number, obj.dayString, obj.lastDayString(obj.date));
+        obj.startDay_SearchString = searchString(1, obj.startDayString, obj.lastDayString(obj.startDay));
+        obj.endDay_SearchString = searchString(100, obj.endDayString, obj.lastDayString(obj.endDay));
+        
+        obj.range_SearchString = searchString(obj.number, obj.dayString, obj.lastDayString(obj.date, obj.rangeDays));
+
+
+        function makeStringFromDate(date){
+           return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+        }
+
+
+        fillDivs();
+        obj.url = makeSearchUrl();
+
+        /* Select the code *///////need to select a different way????
+        codeDiv.select();
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+
+        /* Alert the copied text */
+        alert("Copied the text: " + codeDiv.innerHTML);
+    }
+    function resetDivs(){
+        searchStringDiv.innerHTML = "";
+        startDayDiv.innerHTML = "";
+        endDayDiv.innerHTML = "";
+        range.innerHTML = "";
+    }
+
+    const searchString = (number, day, nextDay)=>{
+        
+        let string = `(Day${number} OR “day ${number}” OR r1d${number} OR “r1 d${number}”) (#100daysofcode) since:${day} until:${nextDay}`;
+    
+        return (string);
+    }
+    function fillDivs(){  
+
+
+        searchStringDiv.innerHTML += `<a href="${makeSearchUrl(obj.day_searchString)}" target="_blank">search</a>`;
+        startDayDiv.innerHTML += `<a href="${makeSearchUrl(obj.startDay_SearchString)}" target="_blank">search</a>`;
+        endDayDiv.innerHTML += `<a href="${makeSearchUrl(obj.endDay_SearchString)}"target="_blank">search</a>`;
+        range.innerHTML += `<a href="${makeSearchUrl(obj.range_SearchString)}"target="_blank">search</a>`;
+    }
+
+
+
+    makeObject("1", "2019-01-01", "7");
+    document.querySelector("#submit").addEventListener("click", callMakeObject);
+
+    function makeSearchUrl(string){
+
+        const start = "https://twitter.com/search?f=tweets&vertical=default&q="
+        const searchURIComponent = encodeURI(string).replace(/[(]/g, '%28').replace(/[)]/g, '%29').replace(/[#]/g, '%23').replace(/[:]/g, '%3A')
+
+        return start + searchURIComponent;
+
+    }
+
+    
+    </script>
+
+</body>
+</html>
+
+
+
+<!-- search output then scroll to bottom so the tweets load and run this in console
+    
+    tweets = document.querySelectorAll(".tweet.js-stream-tweet");
+    var names = [];
+    for (i=0; i<tweets.length; i++){
+        names.push(tweets[i].dataset.screenName);
+    } 
+
+
+    
+    let names1= ["DashBarkHuss","Dominus_Kelvin","mahakothuri","furryronin","BillRobitskeJr","agatakozinska","wirtzdan","iameduardolopez","Kabuk1","EriPDev","antonioluisgil","IdrisDiba","simoncordova123","Bollybkampo","lksngy","wblancha","asucarlos1","Nanahawau__","M_sameer007","mowinik","its_kyle_yoo","RitaLeverett","mahamat_legrand","khip1994","FilipeEstacio","bio_kath","the_moisrex","sharifa_alabry","ev_burrell","0033Ricca","JenEColbert","AryanDadheech3","ibadi_1","mijoe","science_biatch","Cphoto21","naveddeshmukh","Robert_Elliott_","r4casper","sophiecantype","iameddieyayaya","walpolesj","RaahulIm","danijmoss","lomyenSEA","Piyush_0108","erol_aliyev","JKarena7","KharyaSahil","maheimaa","aid_jww","TheRohitDas","omprakash___","AlwinRivera","dan0mah","shuv1824","ekcenier","vivianychen","Dinesh48185069","IbrahimH_ss_n","camcodes","CJ71585025","sarabome","y_behailu","KristenTruempy","KaustubhMishal","CiccioAmato7","Usheninte","arpancodes","VarshitAgarwal2","Frunkul","moko__co","nikhiljain61019","techieEliot","notakshayb","thatCoding_Yogi","DedVampire","Koji_JUNIA","AdhithyanVijay","leeto","17000973","geekytechiechic","hobo_take","RichishJain","YA_cfc14","tommy6073","ryo0111hk","isagi","iSuvm","RabbaniMuzakky","PremanshuPareek","NaveenEdala","MclDrew","furryronin","sac_180822","imasyou718","kiing_edy","tea_koshi","mikeattara","serial_chiller5","iHrishi_mane","MsMaverickk","hanacaraka","LagisquetB","kmelow1","LachlanEagling","ChetanT50970795","merci_good","vegaaSA","abba_xee","adiojha933","Anko1418","iliyasshahapure","SonOfAziza","moko__co","Yinkxz","frozencerebrum","root_ansh","Usheninte","arnay07"]
+    let names2 = ["hanacaraka", "mahamat_legrand", "kiing_edy", "walpolesj", "mahakothuri", "ev_burrell", "xc_emas", "DashBarkHuss", "Englishtomokun", "T_W_H_R_C", "yuj_3", "ryo0111hk"]
+    let peopleLeft = names1.filter((x)=> names2.includes(x));
+
+    var names1 = ;//paste array here
+    var names1 = ;//paste array here
+    var peopleLeft = names1.filter((x)=> names2.includes(x));
+    peopleLeft;
+
+
+    (Day1 OR “day 1” OR r1d1 OR “r1 d1”) (#100daysofcode) since:2019-01-01 until:2019-1-2
+https://twitter.com/search?f=tweets&vertical=default&q=%28Day1%20OR%20%E2%80%9Cday%201%E2%80%9D%20OR%20r1d1%20OR%20%E2%80%9Cr1%20d1%E2%80%9D%29%20%28%23100daysofcode%29%20since%3A2019-01-01%20until%3A2019-1-2&src=typd
+https://twitter.com/search?f=tweets&vertical=default&q=%28Day1%20OR%20%E2%80%9Cday%201%E2%80%9D%20OR%20r1d1%20OR%20%E2%80%9Cr1%20d1%E2%80%9D%29%20%28%23100daysofcode%29%20since%3A2019-01-01%20until%3A2019-1-2&src=typd
+
+https://twitter.com/search?f=tweets&vertical=default&q=%28Day1%20OR%20%E2%80%9Cday%201%E2%80%9D%20OR%20r1d1%20OR%20%E2%80%9Cr1%20d1%E2%80%9D%29%20%28%23100daysofcode%29%20since%3A2019-01-01%20until%3A2019-1-2
+https://twitter.com/search?f=tweets&vertical=default&q=%28Day1%20OR%20%E2%80%9Cday%201%E2%80%9D%20OR%20r1d1%20OR%20%E2%80%9Cr1%20d1%E2%80%9D%29%20%28#100daysofcode%29%20since:2019-01-01%20until:2019-1-2
+-->
