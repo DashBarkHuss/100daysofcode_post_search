@@ -7,101 +7,87 @@
     <title>Twitter participants</title>
             <!-- ------------------------CSS-------------------------- -->
     <style>
+    #code{
+        position: absolute;
+        right:0;
+        top:0;
+        max-width: 50%;;
+        border: 1px solid green;
+    }
     #container{
         display: flex;
         border: 1px solid blue;
         margin: 1%;
     }
-    #day{
+    #searchString{
         margin: 2%;
+        min-height: 100px;
         width: 30%;
         border: 1px solid green;
     }
     #startDay{
         margin: 2%;
-
+        min-height: 100px;
         width: 30%;
         border: 1px solid green;
     }
     #endDay{
         margin: 2%;
-
+        min-height: 100px;
         width: 30%;
         border: 1px solid green;
     }
     #range{
         margin: 2%;
+        min-height: 100px;
         width: 30%;
         border: 1px solid green;
-    }
-    .small{
-        font-size: .8em;
     }
     </style>
 </head>
 <body>
     
     <!-- ------------------------HTML-------------------------- -->
-    <form name = "dayInput">
+    <h2>number:</h2>
+    <input id ="number"></input>
+    <h2>day (YYYY-MM-DD)<span style = "font-size: .5em;">(include leading zeros)</span>:</h2>
+    <input id ="day"></input>
 
-    Day Number <span class="small">(5 would be Day 5 of #100days of code)</span>: 
-    <input id ="number"><br>
-    Date (YYYY-MM-DD)<span class="small">(include leading zeros)</span>:
-    <input id ="date">
+    <h2>Custom day range:</h2>
+    <h3>Day's after day (YYYY-MM-DD)<span style = "font-size: .5em;">(include leading zeros)</span>:</h3>
+    <input id ="rangeDays"></input>
 
-    <h4>Custom day range<span class="small">(optional)</span>:</h4>
-    Day's after day (YYYY-MM-DD)<span class="small">(include leading zeros)</span>:
-    <input id ="rangeDays">
-<br><br>
-    <input type="submit" id="submit">
-    </form>
-
+    <button id="submit">submit</button>
     <hr>
-    <h3>Search</h3>
-    How to get an array of partcipants for a specific day.
-    <ol>
-        <li>Click on a day to search below, and a code snippet will automatially be copied to your clip board.</li>
+    <h3>Strings Queries</h3>
+    <div id="code"><h4>Code</h4><span style = "font-size: .8em;">After you search your string query in twitter, scroll down so all the tweets load. Then copy this code and run in your web inspector console. The result should be a string that contins an array of twitter accounts. Copy the array and paste it somewhere, removing the extra quotes outside the brackets.:</span><hr></div>
+    <div id="container">
+        <div id="searchString"><h4>Day</h4><hr><div class="string"></div></div>
+        <div id="startDay"><h4>Start Day</h4><hr><div class="string"></div></div>
+        <div id="endDay"><h4>End Day</h4><hr><div class="string"></div></div>
 
-        <div id="container">
-                <div id="day"><div class="search"></div></div>
-                <div id="startDay"><div class="search"></div></div>
-                <div id="endDay"><div class="search"></div></div>
-        
-                <div id="range"><div class="search"></div></div>
-            </div>
+        <div id="range"><h4>Custom Range</h4><hr><div class="string"></div></div>
+    </div>
 
-        <li>In the twitter tab that opened, scroll all the way down until all tweets loaded.</li>
-        <li>Open your web console.  Mac: Cmd+Option+J Windows: Cmd+Shift+J </li>
-        <li>Paste into the web console.</li>
-        <li>Press enter.</li>
-        <li> Copy the array of items (a list of items between square brackets []) inside of double quotes that was returned in the console.</li>
-    </ol>
-
-    <hr>
-    <h3></h3>
-
-    <form name="findInCommon">
-        Paste Array of names here:
-        <input id="names">
-        <input type="submit">        
-    </form>
-    <div id = 
     <!-- ------------------------script-------------------------- -->
     
     <script type = "text/javascript">
     const code = "tweets = document.querySelectorAll(\".tweet.js-stream-tweet\");\r\n    var names = [];\r\n    for (i=0; i<\r\ntweets.length; i++){\r\n        names.push(tweets[i].dataset.screenName);\r\n JSON.stringify(names);   } ";
+    const codeDiv = document.getElementById("code");
+    const startDayDiv = document.querySelector("#startDay .string");
+    const endDayDiv = document.querySelector("#endDay .string");
+    const searchStringDiv = document.querySelector("#searchString .string");
+    const range = document.querySelector("#range .string");
+    codeDiv.innerHTML += code;
     
-    const startDayDiv = document.querySelector("#startDay .search");
-    const endDayDiv = document.querySelector("#endDay .search");
-    const dayDiv = document.querySelector("#day .search");
-    const range = document.querySelector("#range .search");
-
     
     
     let obj;
-
+    const callMakeObject = ()=>(makeObject(document.querySelector("#number").value, document.querySelector("#day").value, document.querySelector("#rangeDays").value));
     
     const makeObject = (number, day, rangeDays = "")=>{
+
+
 
         resetDivs();
         obj = {};
@@ -112,9 +98,9 @@
         
         obj.date = new Date(obj.dayString+"T12:00:00");
         
-        obj.lastDayString = function lastDayString(date, extraDays=0){
+        obj.lastDayString = function lastDayString(date, days=1){
             lastDay = new Date(date);
-            lastDay.setDate(date.getDate()+parseInt(extraDays)+1);  
+            lastDay.setDate(date.getDate()+parseInt(days));  
             return makeStringFromDate(lastDay);
         }
         
@@ -143,35 +129,43 @@
 
 
         fillDivs();
+        obj.url = makeSearchUrl();
+
+        /* Select the code *///////need to select a different way????
+        codeDiv.select();
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+
+        /* Alert the copied text */
+        alert("Copied the text: " + codeDiv.innerHTML);
     }
-    
     function resetDivs(){
-        dayDiv.innerHTML = "";
+        searchStringDiv.innerHTML = "";
         startDayDiv.innerHTML = "";
         endDayDiv.innerHTML = "";
         range.innerHTML = "";
     }
 
     const searchString = (number, day, nextDay)=>{
+        
         let string = `(Day${number} OR “day ${number}” OR r1d${number} OR “r1 d${number}”) (#100daysofcode) since:${day} until:${nextDay}`;
+    
         return (string);
     }
-
     function fillDivs(){  
-        const makeButton = (div, searchString, text = "Search")=>{
-            div.innerHTML += `<button class="search"><a href="${makeSearchUrl(searchString)}" target="_blank">${text}</a></button>`;
-        }
 
-        makeButton(dayDiv, obj.day_searchString, `Day ${obj.number} of #100DaysOfCode on ${obj.dayString}`);
-        makeButton(startDayDiv, obj.startDay_SearchString, `Start Day Tweets on ${obj.startDayString}`);
-        makeButton(endDayDiv, obj.endDay_SearchString, `End day tweets on ${obj.endDayString}`);
 
-        //only make range button if range isn't empty
-        obj.rangeDays!=""? makeButton(range, obj.range_SearchString, `Day ${obj.number} started ${obj.dayString} and before ${obj.lastDayString(obj.date, obj.rangeDays)}`): range.innerHTML+="No Range Submitted";
-
-        let searchBtns = document.querySelectorAll(".search");
-        searchBtns.forEach(x=>x.addEventListener('click', copyCode)); //change to event prop
+        searchStringDiv.innerHTML += `<a href="${makeSearchUrl(obj.day_searchString)}" target="_blank">search</a>`;
+        startDayDiv.innerHTML += `<a href="${makeSearchUrl(obj.startDay_SearchString)}" target="_blank">search</a>`;
+        endDayDiv.innerHTML += `<a href="${makeSearchUrl(obj.endDay_SearchString)}"target="_blank">search</a>`;
+        range.innerHTML += `<a href="${makeSearchUrl(obj.range_SearchString)}"target="_blank">search</a>`;
     }
+
+
+
+    makeObject("1", "2019-01-01", "7");
+    document.querySelector("#submit").addEventListener("click", callMakeObject);
 
     function makeSearchUrl(string){
 
@@ -181,50 +175,6 @@
         return start + searchURIComponent;
 
     }
-
-    //found this copy to clipboard snippet online
-    const copyToClipboard = str => {
-        const el = document.createElement('textarea');  // Create a <textarea> element
-        el.value = str;                                 // Set its value to the string that you want copied
-        el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
-        el.style.position = 'absolute';                 
-        el.style.left = '-9999px';                      // Move outside the screen to make it invisible
-        document.body.appendChild(el);                  // Append the <textarea> element to the HTML document
-        const selected =            
-            document.getSelection().rangeCount > 0        // Check if there is any content selected previously
-            ? document.getSelection().getRangeAt(0)     // Store selection if found
-            : false;                                    // Mark as false to know no selection existed before
-        el.select();                                    // Select the <textarea> content
-        document.execCommand('copy');                   // Copy - only works as a result of a user action (e.g. click events)
-        document.body.removeChild(el);                  // Remove the <textarea> element
-        if (selected) {                                 // If a selection existed before copying
-            document.getSelection().removeAllRanges();    // Unselect everything on the HTML document
-            document.getSelection().addRange(selected);   // Restore the original selection
-        }
-    };
-
-    //event listener callback functions
-    const callMakeObject = (e)=>{
-            e.preventDefault();
-            makeObject(document.querySelector("#number").value, document.querySelector("#date").value, document.querySelector("#rangeDays").value)
-            };
-    const copyCode = ()=>{
-        copyToClipboard(code);
-    }
-
-    document.querySelector("form[name=dayInput]").addEventListener("submit", callMakeObject);
-
-
-
-
-
-
-    //__________________test____________________________________
-    makeObject("1", "2019-01-01",3);
-    //__________________________________________________________
-
-
-
 
     
     </script>
@@ -250,7 +200,7 @@
 
     var names1 = ;//paste array here
     var names1 = ;//paste array here
-    var peopleLeft = names.filter((x)=> names2.includes(x));
+    var peopleLeft = names1.filter((x)=> names2.includes(x));
     peopleLeft;
 
 
@@ -261,6 +211,3 @@ https://twitter.com/search?f=tweets&vertical=default&q=%28Day1%20OR%20%E2%80%9Cd
 https://twitter.com/search?f=tweets&vertical=default&q=%28Day1%20OR%20%E2%80%9Cday%201%E2%80%9D%20OR%20r1d1%20OR%20%E2%80%9Cr1%20d1%E2%80%9D%29%20%28%23100daysofcode%29%20since%3A2019-01-01%20until%3A2019-1-2
 https://twitter.com/search?f=tweets&vertical=default&q=%28Day1%20OR%20%E2%80%9Cday%201%E2%80%9D%20OR%20r1d1%20OR%20%E2%80%9Cr1%20d1%E2%80%9D%29%20%28#100daysofcode%29%20since:2019-01-01%20until:2019-1-2
 -->
-
-
-
