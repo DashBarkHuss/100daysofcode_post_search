@@ -89,8 +89,8 @@
     <!-- ------------------------script-------------------------- -->
     
     <script type = "text/javascript">
-    const code = "tweets = document.querySelectorAll(\".tweet.js-stream-tweet\");\r\n    var names = [];\r\n    for (i=0; i<\r\ntweets.length; i++){\r\n        names.push(tweets[i].dataset.screenName);\r\n JSON.stringify(names);   } ";
-    
+    const code1 = "tweets = document.querySelectorAll(\".tweet.js-stream-tweet\");\r\n    const names = [];\r\n    for (i=0; i<\r\ntweets.length; i++){\r\n        names.push(tweets[i].dataset.screenName);\r\n JSON.stringify(names);   } ";
+    let codeToCopy = code1;
     const startDayDiv = document.querySelector("#startDay .search");
     const endDayDiv = document.querySelector("#endDay .search");
     const dayDiv = document.querySelector("#day .search");
@@ -167,7 +167,7 @@
         makeButton(endDayDiv, obj.endDay_SearchString, `End day tweets on ${obj.endDayString}`);
 
         //only make range button if range isn't empty
-        obj.rangeDays!=""? makeButton(range, obj.range_SearchString, `Day ${obj.number} started ${obj.dayString} and before ${obj.lastDayString(obj.date, obj.rangeDays)}`): range.innerHTML+="No Range Submitted";
+        obj.rangeDays!=""? makeButton(range, obj.range_SearchString, `Day ${obj.number} started ${obj.dayString} and before ${obj.lastDayString(obj.date, obj.rangeDays)}`): range.innerHTML+="No Custom Range Submitted";
 
         let searchBtns = document.querySelectorAll(".search");
         searchBtns.forEach(x=>x.addEventListener('click', copyCode)); //change to event prop
@@ -205,22 +205,36 @@
 
     //event listener callback functions
     const callMakeObject = (e)=>{
+            console.log(this);
             e.preventDefault();
             makeObject(document.querySelector("#number").value, document.querySelector("#date").value, document.querySelector("#rangeDays").value)
             };
     const copyCode = ()=>{
-        copyToClipboard(code);
+        copyToClipboard(codeToCopy);
+    }
+    const findInCommonHandler = function(e){
+        e.preventDefault();
+        const names = this.querySelector("#names").value;
+ 
+        const code2 =  `
+            const firstGroup = ${names};
+            ${code1};
+            const peopleLeft = names.filter((x)=> firstGroup.includes(x));
+            peopleLeft;
+        `;
+        codeToCopy = code2;
+        console.log(this);
     }
 
     document.querySelector("form[name=dayInput]").addEventListener("submit", callMakeObject);
-
+    document.querySelector("form[name=findInCommon").addEventListener('submit', findInCommonHandler);
 
 
 
 
 
     //__________________test____________________________________
-    makeObject("1", "2019-01-01",3);
+    makeObject("30", "2019-01-30");
     //__________________________________________________________
 
 

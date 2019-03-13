@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Twitter participants</title>
+            <!-- ------------------------CSS-------------------------- -->
+    <style>
+    #container{
+        display: flex;
+        border: 1px solid blue;
+        margin: 1%;
+    }
+    #day{
+        margin: 2%;
+        width: 30%;
+        border: 1px solid green;
+    }
+    #startDay{
+        margin: 2%;
+
+        width: 30%;
+        border: 1px solid green;
+    }
+    #endDay{
+        margin: 2%;
+
+        width: 30%;
+        border: 1px solid green;
+    }
+    #range{
+        margin: 2%;
+        width: 30%;
+        border: 1px solid green;
+    }
+    .small{
+        font-size: .8em;
+    }
+    </style>
+</head>
+<body>
+    
+    <!-- ------------------------HTML-------------------------- -->
+
+    <div id = "testDiv">
+        testDiv      
+    </div>
+
+    <!-- ------------------------script-------------------------- -->
+    
+    <script type = "text/javascript">
+   
+    const handlerFunctionExpressionArrow = (e)=>{
+        console.log("expression arrow: ", this);
+    }
+    const handlerFunctionExpression = function(e){
+        console.log("expression: ", this);
+    }
+    function handlerFunctionDeclaration(e){
+        console.log("declaration: ", this)
+    }
+
+    document.querySelector("#testDiv").addEventListener('click', handlerFunctionExpressionArrow);
+    document.querySelector("#testDiv").addEventListener('click', handlerFunctionExpression);
+    document.querySelector("#testDiv").addEventListener('click', handlerFunctionDeclaration);
+
+
+
+
+
+
+    
+    </script>
+
+</body>
+</html>
+
+
+
+
