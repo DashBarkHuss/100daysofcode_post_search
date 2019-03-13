@@ -137,7 +137,7 @@
         obj.range_SearchString = searchString(obj.number, obj.dayString, obj.lastDayString(obj.date, obj.rangeDays));
 
 
-        const makeStringFromDate=(date)=>{
+        function makeStringFromDate(date){
            return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
         }
 
@@ -145,7 +145,7 @@
         fillDivs();
     }
     
-    const resetDivs = ()=>{
+    function resetDivs(){
         dayDiv.innerHTML = "";
         startDayDiv.innerHTML = "";
         endDayDiv.innerHTML = "";
@@ -157,7 +157,7 @@
         return (string);
     }
 
-    const fillDiv = ()=>{  
+    function fillDivs(){  
         const makeButton = (div, searchString, text = "Search")=>{
             div.innerHTML += `<button class="search"><a href="${makeSearchUrl(searchString)}" target="_blank">${text}</a></button>`;
         }
@@ -173,7 +173,7 @@
         searchBtns.forEach(x=>x.addEventListener('click', copyCode)); //change to event prop
     }
 
-    const makeSearchUrl = (string)=>{
+    function makeSearchUrl(string){
 
         const start = "https://twitter.com/search?f=tweets&vertical=default&q="
         const searchURIComponent = encodeURI(string).replace(/[(]/g, '%28').replace(/[)]/g, '%29').replace(/[#]/g, '%23').replace(/[:]/g, '%3A')
