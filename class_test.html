@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Class test</title>
+</head>
+<body>
+    <script>
+        class OneHundredCodeDays {
+            constructor(date, num = 1){
+                this.startDate = new Date(date); //what type is date? it's a Date so you have to get the date first
+                this.endDate  = new Date(date);
+
+                this.startDate.setDate(date.getDate()-(parseInt(num)-1)); //parse int just incase we got it from a string
+                this.endDate.setDate(date.getDate()+(100-parseInt(num))); 
+            }
+
+            dateOf(num){
+                let date = new Date(this.startDate); 
+                date.setDate(this.startDate.getDate()+parseInt(num)-1)
+                return date;
+            }
+
+            numberOf(date){
+            return Math.ceil((date-this.startDate)/86400000);;
+            }
+        }
+
+    const now = new Date();
+    const myStart = new Date(2019,00,01);
+
+    const mySetOf100 = new OneHundredCodeDays(myStart);
+
+    </script>
+</body>
+</html>
