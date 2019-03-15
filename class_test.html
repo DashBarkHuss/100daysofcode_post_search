@@ -14,23 +14,52 @@
 
                 this.startDate.setDate(date.getDate()-(parseInt(num)-1)); //parse int just incase we got it from a string
                 this.endDate.setDate(date.getDate()+(100-parseInt(num))); 
-            }
 
+            }
             dateOf(num){
                 let date = new Date(this.startDate); 
                 date.setDate(this.startDate.getDate()+parseInt(num)-1)
                 return date;
             }
-
             numberOf(date){
-            return Math.ceil((date-this.startDate)/86400000);;
+            return Math.floor((date-this.startDate)/86400000) + 1;
+            }
+            participants(participants){
+                this.participants = [...participants];
             }
         }
 
-    const now = new Date();
-    const myStart = new Date(2019,00,01);
 
-    const mySetOf100 = new OneHundredCodeDays(myStart);
+        const tweetSearch = (obj)=>{
+            since = obj.since;
+            until = obj.until || (new Date()).setDate(since.getDate()+1); //obj.since and then add one later??
+            num = obj.num || ""
+;           participants = obj.participants || "";
+            
+            //create list of participants search string 
+            if (participants != "") {
+                participants.forEach(x=>)
+            }
+            console.log("since: ", since, "until:", until, "num: ",num, "participants: ",participants);
+
+        }
+
+        const now = new Date();
+        const myStart = new Date(2019,00,01);
+
+        const mySetOf100 = new OneHundredCodeDays(myStart);
+
+        mySetOf100.participants(["DashBarkHuss","Dominus_Kelvin","mahakothuri","furryronin","BillRobitskeJr","agatakozinska","wirtzdan","iameduardolopez","Kabuk1","EriPDev","antonioluisgil","IdrisDiba","simoncordova123","Bollybkampo","lksngy","wblancha","asucarlos1","Nanahawau__","M_sameer007","mowinik","its_kyle_yoo","RitaLeverett","mahamat_legrand","khip1994","FilipeEstacio","bio_kath","the_moisrex","sharifa_alabry","ev_burrell","0033Ricca","JenEColbert","AryanDadheech3","ibadi_1","mijoe","science_biatch","Cphoto21","naveddeshmukh","Robert_Elliott_","r4casper","sophiecantype","iameddieyayaya","walpolesj","RaahulIm","danijmoss","lomyenSEA","Piyush_0108","erol_aliyev","JKarena7","KharyaSahil","maheimaa","aid_jww","TheRohitDas","omprakash___","AlwinRivera","dan0mah","shuv1824","ekcenier","vivianychen","Dinesh48185069","IbrahimH_ss_n","camcodes","CJ71585025","sarabome","y_behailu","KristenTruempy","KaustubhMishal","CiccioAmato7","Usheninte","arpancodes","VarshitAgarwal2","Frunkul","moko__co","nikhiljain61019","techieEliot","notakshayb","thatCoding_Yogi","DedVampire","Koji_JUNIA","AdhithyanVijay","leeto","17000973","geekytechiechic","hobo_take","RichishJain","YA_cfc14","tommy6073","ryo0111hk","isagi","iSuvm","RabbaniMuzakky","PremanshuPareek","NaveenEdala","MclDrew","furryronin","sac_180822","imasyou718","kiing_edy","tea_koshi","mikeattara","serial_chiller5","iHrishi_mane","MsMaverickk","hanacaraka","LagisquetB","kmelow1","LachlanEagling","ChetanT50970795","merci_good","vegaaSA","abba_xee","adiojha933","Anko1418","iliyasshahapure","SonOfAziza","moko__co","Yinkxz","frozencerebrum","root_ansh","Usheninte","arnay07"])
+
+        tweetSearch({since : mySetOf100.startDate, until: mySetOf100.dateOf(10), participants: mySetOf100.participants})
+
+
+        /*
+        from:DashBarkHuss, OR from:Dominus_Kelvin 
+        input = num, day
+
+        */
+
 
     </script>
 </body>
