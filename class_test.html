@@ -30,63 +30,74 @@
         }
 
 
-        const searchString = (obj)=>{ //change to a class since we are making an object after all
-            since = obj.since || "";
-            until = obj.until || "";
-            range = obj.range || "";
-            num = obj.num || "";
-            participants = obj.participants || "";
-
-            if (range!="" && until != ""){ return "error, you can't have a 'range' and an 'until' value. You must have one or the other"}
+        class Search { //change to a class since we are making an object after all
             
-            const formatDate = (date)=>{ 
-                const year = date.getFullYear();
-                const month = date.getMonth() + 1;
-                const day = date.getDay();
-                return `${year}-${month}-${day}`;
-            }
+            constructor (obj){
+                //temporarily save the passed properties into these variables for easier read and make empty if no params
+                let since = obj.since || "";
+                let until = obj.until || "";
+                let range = obj.range || "";
+                let num = obj.num || "";
+                let participants = obj.participants || "";
+               
+                //errors, how do we do this?
+                if (range!="" && until != ""){ return console.error("error, you can't have a 'range' and an 'until' value. You must have one or the other")};
+                if (since==""){ return console.error("error, you you must have a since value")};
+                
+                
+                //should this function be in the search class constructor or on it's own?
+                const formatDate = (date)=>{ 
+                    const year = date.getFullYear();
+                    const month = date.getMonth() + 1;
+                    const day = date.getDay();
+                    return `${year}-${month}-${day}`;
+                };
+                
+                //this gets the until date
+                const untilDate = ()=>{
+                //until using until or range value
+                    if(until != ""){
+                        return until;
 
-            let search = {}
+                    } else if (range == "" && until == ""){
+                        let day = new Date();
+                        day.setDate(since.getDate()+1)
+                        return day;
 
-            //set search string for participants
-            if (participants !== ""){
-                search.participants = participants.reduce(((a,c,i)=>{
-                    let x; 
-                    i==1? x =`from:${a}, OR from:${c}` : x = `${a}, OR from:${c}`;
-                    return x;
-                }))
-            }
+                    } else if (range != ""){
+                        let day = new Date();
+                        day.setDate(since.getDate()+range);
+                        return day;
+                    } 
+                };
 
-            //set search String for date range
-            //since
-            if(since != "") search.since = `since:${formatDate(since)}`;
+                //since
+                if(since != "") this.since = `since:${formatDate(since)}`;
+                //sets the until property
+                this.until = `until: ${formatDate(untilDate())}`;
 
-            const untilDate = ()=>{
-            //until using until or range value
-                if(until != ""){
-                    return until;
-                } else if (range == "" && until == ""){
-                    return (new Date()).setDate(since.getDate()+1);
-                } else if (range != ""){
-                    return (new Date()).setDate(since.getDate()+range);
-                } 
-            }
+                //participants
+                if (participants !== ""){
+                    this.participants = participants.reduce(((a,c,i)=>{
+                        let x; 
+                        i==1? x =`from:${a}, OR from:${c}` : x = `${a}, OR from:${c}`;
+                        return x;
+                    }))
+                };
 
-            search.until = `until: ${formatDate(untilDate())}`;
-
-            //get query with day number
-            if (num!=""){
-                search.number = `(Day${num} OR “day ${num}” OR r1d${num} OR “r1 d${num}”)`;
+                //query with day number
+                if (num!=""){
+                    this.number = `(Day${num} OR “day ${num}” OR r1d${num} OR “r1 d${num}”)`;
+                }
             }            
 
             //could we do the below with dot chaining:
-            search.url = (...args)=>{
+            url(...args){
                 const string = args.join(' ') + ` #100DaysOfCode`;
                 const urlStart = "https://twitter.com/search?f=tweets&vertical=default&q="
                 const url = encodeURI(string).replace(/[(]/g, '%28').replace(/[)]/g, '%29').replace(/[#]/g, '%23').replace(/[:]/g, '%3A')
                 return urlStart + url;
             }
-            return search;
         }
 
         const now = new Date();
@@ -97,7 +108,8 @@
         mySetOf100.participants(["DashBarkHuss","Dominus_Kelvin","mahakothuri","furryronin","BillRobitskeJr","agatakozinska","wirtzdan","iameduardolopez","Kabuk1","EriPDev","antonioluisgil","IdrisDiba","simoncordova123","Bollybkampo","lksngy","wblancha","asucarlos1","Nanahawau__","M_sameer007","mowinik","its_kyle_yoo","RitaLeverett","mahamat_legrand","khip1994","FilipeEstacio","bio_kath","the_moisrex","sharifa_alabry","ev_burrell","0033Ricca","JenEColbert","AryanDadheech3","ibadi_1","mijoe","science_biatch","Cphoto21","naveddeshmukh","Robert_Elliott_","r4casper","sophiecantype","iameddieyayaya","walpolesj","RaahulIm","danijmoss","lomyenSEA","Piyush_0108","erol_aliyev","JKarena7","KharyaSahil","maheimaa","aid_jww","TheRohitDas","omprakash___","AlwinRivera","dan0mah","shuv1824","ekcenier","vivianychen","Dinesh48185069","IbrahimH_ss_n","camcodes","CJ71585025","sarabome","y_behailu","KristenTruempy","KaustubhMishal","CiccioAmato7","Usheninte","arpancodes","VarshitAgarwal2","Frunkul","moko__co","nikhiljain61019","techieEliot","notakshayb","thatCoding_Yogi","DedVampire","Koji_JUNIA","AdhithyanVijay","leeto","17000973","geekytechiechic","hobo_take","RichishJain","YA_cfc14","tommy6073","ryo0111hk","isagi","iSuvm","RabbaniMuzakky","PremanshuPareek","NaveenEdala","MclDrew","furryronin","sac_180822","imasyou718","kiing_edy","tea_koshi","mikeattara","serial_chiller5","iHrishi_mane","MsMaverickk","hanacaraka","LagisquetB","kmelow1","LachlanEagling","ChetanT50970795","merci_good","vegaaSA","abba_xee","adiojha933","Anko1418","iliyasshahapure","SonOfAziza","moko__co","Yinkxz","frozencerebrum","root_ansh","Usheninte","arnay07"])
         // mySetOf100.participants(["DashBarkHuss","Dominus_Kelvin","mahakothuri"]);
 
-        let search = searchString({since : mySetOf100.startDate, until: mySetOf100.dateOf(10), participants: mySetOf100.participants, num: 3})
+        let search = new Search({since : mySetOf100.startDate, until: mySetOf100.dateOf(10), participants: mySetOf100.participants, num: 3})
+
 
 
     </script>
