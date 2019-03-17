@@ -42,7 +42,7 @@
                
                 //errors, how do we do this?
                 if (range!="" && until != ""){ return console.error("error, you can't have a 'range' and an 'until' value. You must have one or the other")};
-                if (since==""){ return console.error("error, you you must have a since value")};
+                if (since==""){ return console.error("error, you must have a since value")};
                 
                 
                 //should this function be in the search class constructor or on it's own?
@@ -72,7 +72,7 @@
                 };
 
                 //since
-                if(since != "") this.since = `since:${formatDate(since)}`;
+                this.since = `since:${formatDate(since)}`;
                 //sets the until property
                 this.until = `until: ${formatDate(untilDate())}`;
 
