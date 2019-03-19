@@ -31,11 +31,14 @@
     }
 
     #container > * {
-        border: 2px solid greenyellow; 
+        border: 2px solid green; 
     }
     .start{
         grid-area: 5/5/9/9;
         border-radius: 50%;
+    }
+    .start::after{
+        content: "Start";
     }
 
     .instructions{
@@ -50,8 +53,17 @@
         grid-area: 10/10/12/12; 
     }
 
+    .next::after{
+        content: "next";
+    }
     .back{
-        grid-area: 10/2/12/4;; 
+        grid-area: 10/2/12/4;
+    }
+    .back::after{
+        content: "back";
+    }
+    .dateLink{
+        grid-area: 7/4/9/10;
     }
     </style>
 </head>

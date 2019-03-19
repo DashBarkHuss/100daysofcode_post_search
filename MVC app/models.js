@@ -41,7 +41,7 @@ class Search {
         const formatDate = (date)=>{ 
             const year = date.getFullYear();
             const month = date.getMonth() + 1;
-            const day = date.getDay();
+            const day = date.getDate();
             return `${year}-${month}-${day}`;
         };
         
@@ -52,12 +52,12 @@ class Search {
                 return until;
 
             } else if (range == "" && until == ""){
-                let day = new Date();
+                let day = new Date(since);
                 day.setDate(since.getDate()+1)
                 return day;
 
             } else if (range != ""){
-                let day = new Date();
+                let day = new Date(since);
                 day.setDate(since.getDate()+range);
                 return day;
             } 
@@ -66,7 +66,7 @@ class Search {
         //since
         this.since = `since:${formatDate(since)}`;
         //sets the until property
-        this.until = `until: ${formatDate(untilDate())}`;
+        this.until = `until:${formatDate(untilDate())}`;
 
         //participants
         if (participants !== ""){

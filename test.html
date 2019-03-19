@@ -13,32 +13,23 @@
 <body>
     
     <!-- ------------------------HTML-------------------------- -->
-
+    <div id="container">
+        <div id="butt"></div>
+    </div>
 
     <!-- ------------------------script-------------------------- -->
     
     <script type = "text/javascript">
-   
-   class TestClass { 
-            
-            constructor (day){
+const elWithClass = (el, ...className)=>{
+    const elem = document.createElement(el);
+    elem.classList.add(...className);
+    return elem;
+}
 
-                //should this be in the search class or on it's own?
-                const formatDate = (date)=>{ 
-                    const year = date.getFullYear();
-                    const month = date.getMonth() + 1;
-                    const day = date.getDay();
-                    return `${year}-${month}-${day}`;
-                };
-
-
-                //since
-                this.date = formatDate(day);
-       
-        }
-   }
-
-
+//start 
+const start = ()=>(elWithClass("button","start"));
+    const mainEl = document.querySelector("#container");
+    mainEl.replaceChild((document.querySelector("#butt")), start());
 
 
     
