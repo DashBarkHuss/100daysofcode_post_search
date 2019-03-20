@@ -1,13 +1,24 @@
 //main container
 const mainEl = document.querySelector("#container");
 
-//should all these elements be in functions?? instead of being created right away? probably
-//document fragments??
+//view functions
+
 const elWithClass = (el, ...className)=>{
     const elem = document.createElement(el);
     elem.classList.add(...className);
     return elem;
 }
+
+const clearLayout=(...except)=>{
+    let i =0;
+    while (mainEl.childElementCount > except.length){ //has child nodes besides the ones in excpetion
+        let firstChild = mainEl.childNodes[i];
+        !except.includes(firstChild)? firstChild.remove(): i++;
+    }
+}
+
+
+//components
 
 //start 
 const start = ()=>(elWithClass("button","start"));
@@ -33,10 +44,18 @@ const link = (url, text)=>{
     return el;  
 };
 
+//layouts
 //small input layout
 const inputLayout = (inputSize)=>{
     mainEl.appendChild(instructions());
     mainEl.appendChild(input(inputSize));
+    mainEl.appendChild(next());
+    mainEl.appendChild(back());
+}
+
+const linkLayout = (url)=>{
+    mainEl.appendChild(instructions());
+    mainEl.appendChild(link(url, "search"));
     mainEl.appendChild(next());
     mainEl.appendChild(back());
 }

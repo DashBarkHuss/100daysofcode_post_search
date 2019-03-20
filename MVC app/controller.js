@@ -1,6 +1,8 @@
 //
-const code1 = "tweets = document.querySelectorAll(\".tweet.js-stream-tweet\");\r\n    const names = [];\r\n    for (i=0; i<\r\ntweets.length; i++){\r\n        names.push(tweets[i].dataset.screenName);\r\n JSON.stringify(names);   } ";
-let codeToCopy = code1;
+const code1 = "tweets = document.querySelectorAll(\".tweet.js-stream-tweet\");\r\n    const names = [];\r\n    for (i=0; i<\r\ntweets.length; i++){\r\n        names.push(tweets[i].dataset.screenName);\r\n copyToClipboard(names);   } ";
+const copyFunctionMin = 'copyToClipboard=e=>{const t=document.createElement("textarea");t.value=e,t.setAttribute("readonly",""),t.style.position="absolute",t.style.left="-9999px",document.body.appendChild(t);const o=document.getSelection().rangeCount>0&&document.getSelection().getRangeAt(0);t.select(),document.execCommand("copy"),document.body.removeChild(t),o&&(document.getSelection().removeAllRanges(),document.getSelection().addRange(o))};'
+
+let codeToCopy = copyFunctionMin + code1;
 let nextFunction;
 
 let startButton = start();
@@ -18,14 +20,14 @@ const handler = (e)=>{
 
 const startHandler=()=>{
     //get rid of button
-    mainEl.removeChild(startButton);
+    clearLayout();
     getDate();
 }
 
 
 const getDate = ()=>{
     inputLayout("small");
-    nextFunction = view1;
+    nextFunction = goToView2;
 }
 
 const nextHandler=()=>{
@@ -33,14 +35,14 @@ const nextHandler=()=>{
     nextFunction();
 }
 
-const view1 = ()=>{
-    console.log("2i");
+const goToView2 = ()=>{
     let date = document.querySelector(".input").value;
     date = datefromString(date);
     let oneHundred = new OneHundredCodeDays(date);
     let search = new Search({since: oneHundred.startDate, range:0});
     let url = search.url(search.since, search.until, search.number);
-    mainEl.replaceChild(link(url, "search"), document.querySelector(".input"));
+    clearLayout();
+    linkLayout(url);
     copyToClipboard(codeToCopy);
 }
 const backHandler=()=>{
@@ -72,6 +74,7 @@ const datefromString=(str)=>{
 
 //found this copy to clipboard snippet online
 const copyToClipboard = str => {
+    console.log(str);
     const el = document.createElement('textarea');  // Create a <textarea> element
     el.value = str;                                 // Set its value to the string that you want copied
     el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
@@ -92,6 +95,6 @@ const copyToClipboard = str => {
 };
 
 //------------------ test
-startHandler();
-document.querySelector(".input").value = "2019-01-01";
-nextHandler();
+// startHandler();
+// document.querySelector(".input").value = "2019-01-01";
+// nextHandler();
