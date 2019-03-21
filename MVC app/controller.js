@@ -1,16 +1,24 @@
 //
-const code1 = "tweets = document.querySelectorAll(\".tweet.js-stream-tweet\");\r\n    const names = [];\r\n    for (i=0; i<\r\ntweets.length; i++){\r\n        names.push(tweets[i].dataset.screenName);\r\n copyToClipboard(names);   } ";
+const code1 = "tweets = document.querySelectorAll(\".tweet.js-stream-tweet:not(.promoted-tweet)\");\r\n    const names = [];\r\n    for (i=0; i<\r\ntweets.length; i++){\r\n        names.push(tweets[i].dataset.screenName);\r\n copyToClipboard(names);   } ";
 const copyFunctionMin = 'copyToClipboard=e=>{const t=document.createElement("textarea");t.value=e,t.setAttribute("readonly",""),t.style.position="absolute",t.style.left="-9999px",document.body.appendChild(t);const o=document.getSelection().rangeCount>0&&document.getSelection().getRangeAt(0);t.select(),document.execCommand("copy"),document.body.removeChild(t),o&&(document.getSelection().removeAllRanges(),document.getSelection().addRange(o))};'
 
 let codeToCopy = copyFunctionMin + code1;
 let nextFunction;
+let backFunction;
+let oneHundred; //better place to have this?
+let view0= function(){clearLayout(); mainEl.appendChild(startButton);};
+let currentView=0;
+const nextView = ()=>{currentView++; view[currentView]()};
+const backView = ()=>{currentView--; view[currentView]()};
+
 
 let startButton = start();
 mainEl.appendChild(startButton);
+
 const handler = (e)=>{
     if(e.target.id=="container") return;
     console.log(e.target);
-
+    
     if(e.target.className=="start") startHandler();
     if(e.target.className=="next") nextHandler();
     if(e.target.className=="back") backHandler();
@@ -21,53 +29,73 @@ const handler = (e)=>{
 const startHandler=()=>{
     //get rid of button
     clearLayout();
-    getDate();
+    nextView();
 }
 
 
-const getDate = ()=>{
+const view1 = ()=>{
     inputLayout("small");
-    nextFunction = goToView2;
 }
 
 const nextHandler=()=>{
-    console.log("hi");
-    nextFunction();
+    console.log("next");
+    console.log("currentview", currentView);
+    nextView();
 }
 
-const goToView2 = ()=>{
+const view2 = ()=>{
     let date = document.querySelector(".input").value;
     date = datefromString(date);
-    let oneHundred = new OneHundredCodeDays(date);
+    oneHundred = new OneHundredCodeDays(date);
     let search = new Search({since: oneHundred.startDate, range:0});
     let url = search.url(search.since, search.until, search.number);
     clearLayout();
     linkLayout(url);
     copyToClipboard(codeToCopy);
 }
+
+const view3 = ()=>{
+    clearLayout();
+    inputLayout('large','screennames');
+
+}
+const view4 = ()=>{
+    let screennames = document.querySelector(".screennames").value;
+    setFindInCommonCode(screennames);
+    copyToClipboard(codeToCopy);
+    clearLayout();
+    let rightNow = new Date();
+    let yesterday = new Date();
+    yesterday.setDate(rightNow.getDate()-1);
+    let weekAgo = new Date();
+    weekAgo.setDate(rightNow.getDate()-7);
+    let search = new Search({since:weekAgo, until: rightNow, num: oneHundred.numberOf(yesterday)});
+    let url = search.url(search.since, search.until, search.num);
+    linkLayout(url)
+}
 const backHandler=()=>{
     console.log();
 }
 
-const findInCommon = function(e){
-    e.preventDefault();
-    const names = this.querySelector("#names").value;
-
+const setFindInCommonCode = (screennames)=>{
+    //screennames = "xojan0120,MrJasoneTaylor,chazmcbride,cj87holler,_shams_ad,jrl_iv,DashBarkHuss,lepinekong,joakimacarr,iC0dE_,GabbiLopezB,caslabs2,Melissa_A_Kemp,yashaslokesh_,DevLC1,andraStrc,deepstackedtek,jpasholk,rgilbert__,js_tut";
+    screennames = uniqueInArray(screennames.split(","));
     const code2 =  `
-        const firstGroup = ${names};
-        ${code1};
-        const peopleLeft = names.filter((x)=> firstGroup.includes(x));
-        peopleLeft;
+    const firstGroup = ${screennames};
+    ${copyFunctionMin + code1};
+    const peopleLeft = names.filter((x)=> firstGroup.includes(x));
+    peopleLeft;
     `;
     codeToCopy = code2;
-    console.log(this);
+    console.log("new code" + codeToCopy);
 }
 
 
 //change this to event propogations since elements will be moving around?
 mainEl.addEventListener("click", handler);
+let view = [view0, view1, view2, view3, view4]
 
-///helpers
+//-------------------------------helpers----------------------------------------------------
 const datefromString=(str)=>{
     return (new Date(str+"T12:00:00"));  
 }
@@ -94,7 +122,11 @@ const copyToClipboard = str => {
     }
 };
 
+const uniqueInArray = (arr)=>(arr.filter((x,i)=> arr.indexOf(x)>=i));
+
 //------------------ test
 // startHandler();
 // document.querySelector(".input").value = "2019-01-01";
 // nextHandler();
+// nextHandler();
+// document.querySelector(".input").value = "p,l,l";

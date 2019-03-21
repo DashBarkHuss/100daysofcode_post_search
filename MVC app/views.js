@@ -40,15 +40,15 @@ const back = ()=>(elWithClass("button", "back"));
 
 const link = (url, text)=>{
     let el = elWithClass("button", "dateLink");
-    el.innerHTML= `<a href ="${url}">${text}</a>`;
+    el.innerHTML= `<a href ="${url}" target="_blank">${text}</a>`;
     return el;  
 };
 
 //layouts
 //small input layout
-const inputLayout = (inputSize)=>{
+const inputLayout = (...classNames)=>{
     mainEl.appendChild(instructions());
-    mainEl.appendChild(input(inputSize));
+    mainEl.appendChild(input(...classNames));
     mainEl.appendChild(next());
     mainEl.appendChild(back());
 }
