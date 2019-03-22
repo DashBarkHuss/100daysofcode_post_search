@@ -47,7 +47,7 @@ const view2 = ()=>{
     let date = document.querySelector(".input").value;
     date = datefromString(date);
     oneHundred = new OneHundredCodeDays(date);
-    let search = new Search({since: oneHundred.startDate, range:0, num:1});
+    let search = new Search({since: oneHundred.startDate, range:0, num:[1]});
     let url = search.url(search.since, search.until, search.number);
     clearLayout();
     linkLayout(url);
@@ -64,12 +64,15 @@ const view4 = ()=>{
     codeToCopy = setFindInCommonCode(screennames);
     copyToClipboard(codeToCopy);
     clearLayout();
+
+    //days
     let rightNow = new Date();
     let yesterday = new Date();
     yesterday.setDate(rightNow.getDate()-1);
     let weekAgo = new Date();
     weekAgo.setDate(rightNow.getDate()-7);
-    let search = new Search({since:weekAgo, until: rightNow, num: oneHundred.numberOf(weekAgo)});
+
+    let search = new Search({since:yesterday, until: rightNow, num: range(oneHundred.numberOf(weekAgo), oneHundred.numberOf(yesterday))});
     let url = search.url(search.since, search.until, search.number);
     linkLayout(url)
 }
@@ -124,6 +127,8 @@ const copyToClipboard = str => {
 };
 
 const uniqueInArray = (arr)=>(arr.filter((x,i)=> arr.indexOf(x)>=i));
+
+const range = (start, end)=>[...Array(end-start+1).keys()].map(x=>x+start);
 
 //------------------ test
 startHandler();
