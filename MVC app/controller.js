@@ -32,22 +32,22 @@ const startHandler=()=>{
     nextView();
 }
 
-
-const view1 = ()=>{
-    inputLayout("small");
-}
-
 const nextHandler=()=>{
     console.log("next");
     console.log("currentview", currentView);
     nextView();
 }
 
+const view1 = ()=>{
+    inputLayout("small");
+}
+
+
 const view2 = ()=>{
     let date = document.querySelector(".input").value;
     date = datefromString(date);
     oneHundred = new OneHundredCodeDays(date);
-    let search = new Search({since: oneHundred.startDate, range:0});
+    let search = new Search({since: oneHundred.startDate, range:0, num:1});
     let url = search.url(search.since, search.until, search.number);
     clearLayout();
     linkLayout(url);
@@ -61,7 +61,7 @@ const view3 = ()=>{
 }
 const view4 = ()=>{
     let screennames = document.querySelector(".screennames").value;
-    setFindInCommonCode(screennames);
+    codeToCopy = setFindInCommonCode(screennames);
     copyToClipboard(codeToCopy);
     clearLayout();
     let rightNow = new Date();
@@ -69,8 +69,8 @@ const view4 = ()=>{
     yesterday.setDate(rightNow.getDate()-1);
     let weekAgo = new Date();
     weekAgo.setDate(rightNow.getDate()-7);
-    let search = new Search({since:weekAgo, until: rightNow, num: oneHundred.numberOf(yesterday)});
-    let url = search.url(search.since, search.until, search.num);
+    let search = new Search({since:weekAgo, until: rightNow, num: oneHundred.numberOf(weekAgo)});
+    let url = search.url(search.since, search.until, search.number);
     linkLayout(url)
 }
 const backHandler=()=>{
@@ -81,13 +81,14 @@ const setFindInCommonCode = (screennames)=>{
     //screennames = "xojan0120,MrJasoneTaylor,chazmcbride,cj87holler,_shams_ad,jrl_iv,DashBarkHuss,lepinekong,joakimacarr,iC0dE_,GabbiLopezB,caslabs2,Melissa_A_Kemp,yashaslokesh_,DevLC1,andraStrc,deepstackedtek,jpasholk,rgilbert__,js_tut";
     screennames = uniqueInArray(screennames.split(","));
     const code2 =  `
-    const firstGroup = ${screennames};
+    const firstGroup = [${screennames.map(x=> `"${x}"`)}];
     ${copyFunctionMin + code1};
     const peopleLeft = names.filter((x)=> firstGroup.includes(x));
+    copyToClipboard(peopleLeft);
     peopleLeft;
+
     `;
-    codeToCopy = code2;
-    console.log("new code" + codeToCopy);
+    return code2;
 }
 
 
@@ -125,8 +126,9 @@ const copyToClipboard = str => {
 const uniqueInArray = (arr)=>(arr.filter((x,i)=> arr.indexOf(x)>=i));
 
 //------------------ test
-// startHandler();
-// document.querySelector(".input").value = "2019-01-01";
-// nextHandler();
-// nextHandler();
-// document.querySelector(".input").value = "p,l,l";
+startHandler();
+document.querySelector(".input").value = "2019-01-01";
+nextHandler();
+nextHandler();
+document.querySelector(".input").value = "DashBarkHuss,Dominus_Kelvin,mahakothuri,furryronin,BillRobitskeJr,agatakozinska,wirtzdan,iameduardolopez,Kabuk1,EriPDev,antonioluisgil,IdrisDiba,simoncordova123,Bollybkampo,lksngy,wblancha,asucarlos1,Nanahawau__,M_sameer007,mowinik,its_kyle_yoo,RitaLeverett,mahamat_legrand,khip1994,FilipeEstacio,bio_kath,the_moisrex,sharifa_alabry,ev_burrell,0033Ricca,JenEColbert,AryanDadheech3,ibadi_1,mijoe,science_biatch,Cphoto21,naveddeshmukh,Robert_Elliott_,r4casper,sophiecantype,iameddieyayaya,walpolesj,RaahulIm,danijmoss,lomyenSEA,Piyush_0108,erol_aliyev,JKarena7,KharyaSahil,maheimaa,aid_jww,TheRohitDas,omprakash___,AlwinRivera,dan0mah,shuv1824,ekcenier,vivianychen,Dinesh48185069,IbrahimH_ss_n,camcodes,CJ71585025,sarabome,y_behailu,KristenTruempy,KaustubhMishal,CiccioAmato7,Usheninte,arpancodes,VarshitAgarwal2,Frunkul,moko__co,nikhiljain61019,techieEliot,notakshayb,thatCoding_Yogi,DedVampire,Koji_JUNIA,AdhithyanVijay,leeto,17000973,geekytechiechic,hobo_take,RichishJain,tommy6073,ryo0111hk,isagi,iSuvm,RabbaniMuzakky,PremanshuPareek,NaveenEdala,MclDrew,furryronin,sac_180822,imasyou718,kiing_edy,tea_koshi,mikeattara,serial_chiller5,iHrishi_mane,MsMaverickk,hanacaraka,LagisquetB,kmelow1,LachlanEagling,ChetanT50970795,merci_good,vegaaSA,abba_xee,Anko1418,iliyasshahapure,SonOfAziza,moko__co,Yinkxz,frozencerebrum,root_ansh,Usheninte,arnay07";
+
