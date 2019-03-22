@@ -1,5 +1,5 @@
 //
-const code1 = "tweets = document.querySelectorAll(\".tweet.js-stream-tweet:not(.promoted-tweet)\");\r\n    const names = [];\r\n    for (i=0; i<\r\ntweets.length; i++){\r\n        names.push(tweets[i].dataset.screenName);\r\n copyToClipboard(names);   } ";
+const code1 = "tweets = document.querySelectorAll(\".tweet.js-stream-tweet:not(.promoted-tweet)\");\r\n    const names = [];\r\n    for (i=0; i<\r\ntweets.length; i++){\r\n        names.push(tweets[i].dataset.screenName);\r\n copyToClipboard(JSON.stringify(names));   } ";
 const copyFunctionMin = 'copyToClipboard=e=>{const t=document.createElement("textarea");t.value=e,t.setAttribute("readonly",""),t.style.position="absolute",t.style.left="-9999px",document.body.appendChild(t);const o=document.getSelection().rangeCount>0&&document.getSelection().getRangeAt(0);t.select(),document.execCommand("copy"),document.body.removeChild(t),o&&(document.getSelection().removeAllRanges(),document.getSelection().addRange(o))};'
 
 let codeToCopy = copyFunctionMin + code1;
@@ -60,7 +60,7 @@ const view3 = ()=>{
 
 }
 const view4 = ()=>{
-    let screennames = document.querySelector(".screennames").value;
+    let screennames = JSON.parse(document.querySelector(".screennames").value);
     codeToCopy = setFindInCommonCode(screennames);
     copyToClipboard(codeToCopy);
     clearLayout();
@@ -82,12 +82,12 @@ const backHandler=()=>{
 
 const setFindInCommonCode = (screennames)=>{
     //screennames = "xojan0120,MrJasoneTaylor,chazmcbride,cj87holler,_shams_ad,jrl_iv,DashBarkHuss,lepinekong,joakimacarr,iC0dE_,GabbiLopezB,caslabs2,Melissa_A_Kemp,yashaslokesh_,DevLC1,andraStrc,deepstackedtek,jpasholk,rgilbert__,js_tut";
-    screennames = uniqueInArray(screennames.split(","));
+    screennames = uniqueInArray(screennames);
     const code2 =  `
-    const firstGroup = [${screennames.map(x=> `"${x}"`)}];
+    const firstGroup = ${JSON.stringify(screennames)};
     ${copyFunctionMin + code1};
     const peopleLeft = names.filter((x)=> firstGroup.includes(x));
-    copyToClipboard(peopleLeft);
+    copyToClipboard(JSON.stringify(peopleLeft));
     peopleLeft;
 
     `;
@@ -131,9 +131,10 @@ const uniqueInArray = (arr)=>(arr.filter((x,i)=> arr.indexOf(x)>=i));
 const range = (start, end)=>[...Array(end-start+1).keys()].map(x=>x+start);
 
 //------------------ test
-startHandler();
-document.querySelector(".input").value = "2019-01-01";
-nextHandler();
-nextHandler();
-document.querySelector(".input").value = "DashBarkHuss,Dominus_Kelvin,mahakothuri,furryronin,BillRobitskeJr,agatakozinska,wirtzdan,iameduardolopez,Kabuk1,EriPDev,antonioluisgil,IdrisDiba,simoncordova123,Bollybkampo,lksngy,wblancha,asucarlos1,Nanahawau__,M_sameer007,mowinik,its_kyle_yoo,RitaLeverett,mahamat_legrand,khip1994,FilipeEstacio,bio_kath,the_moisrex,sharifa_alabry,ev_burrell,0033Ricca,JenEColbert,AryanDadheech3,ibadi_1,mijoe,science_biatch,Cphoto21,naveddeshmukh,Robert_Elliott_,r4casper,sophiecantype,iameddieyayaya,walpolesj,RaahulIm,danijmoss,lomyenSEA,Piyush_0108,erol_aliyev,JKarena7,KharyaSahil,maheimaa,aid_jww,TheRohitDas,omprakash___,AlwinRivera,dan0mah,shuv1824,ekcenier,vivianychen,Dinesh48185069,IbrahimH_ss_n,camcodes,CJ71585025,sarabome,y_behailu,KristenTruempy,KaustubhMishal,CiccioAmato7,Usheninte,arpancodes,VarshitAgarwal2,Frunkul,moko__co,nikhiljain61019,techieEliot,notakshayb,thatCoding_Yogi,DedVampire,Koji_JUNIA,AdhithyanVijay,leeto,17000973,geekytechiechic,hobo_take,RichishJain,tommy6073,ryo0111hk,isagi,iSuvm,RabbaniMuzakky,PremanshuPareek,NaveenEdala,MclDrew,furryronin,sac_180822,imasyou718,kiing_edy,tea_koshi,mikeattara,serial_chiller5,iHrishi_mane,MsMaverickk,hanacaraka,LagisquetB,kmelow1,LachlanEagling,ChetanT50970795,merci_good,vegaaSA,abba_xee,Anko1418,iliyasshahapure,SonOfAziza,moko__co,Yinkxz,frozencerebrum,root_ansh,Usheninte,arnay07";
-
+// startHandler();
+// document.querySelector(".input").value = "2019-01-01";
+// nextHandler();
+// nextHandler();
+// document.querySelector(".input").value = '["DashBarkHuss","Dominus_Kelvin","mahakothuri","furryronin","BillRobitskeJr","agatakozinska","wirtzdan","iameduardolopez","Kabuk1","EriPDev","antonioluisgil","IdrisDiba","simoncordova123","Bollybkampo","lksngy","wblancha","asucarlos1","Nanahawau__","M_sameer007","mowinik","its_kyle_yoo","RitaLeverett","mahamat_legrand","khip1994","FilipeEstacio","bio_kath","the_moisrex","sharifa_alabry","ev_burrell","0033Ricca","JenEColbert","AryanDadheech3","ibadi_1","mijoe","science_biatch","Cphoto21","naveddeshmukh","Robert_Elliott_","r4casper","sophiecantype","iameddieyayaya","walpolesj","RaahulIm","danijmoss","lomyenSEA","Piyush_0108","erol_aliyev","JKarena7","KharyaSahil","maheimaa","aid_jww","TheRohitDas","omprakash___","AlwinRivera","dan0mah","shuv1824","ekcenier","vivianychen","Dinesh48185069","IbrahimH_ss_n","camcodes","CJ71585025","sarabome","y_behailu","KristenTruempy","KaustubhMishal","CiccioAmato7","Usheninte","arpancodes","VarshitAgarwal2","Frunkul","moko__co","nikhiljain61019","techieEliot","notakshayb","thatCoding_Yogi","DedVampire","Koji_JUNIA","AdhithyanVijay","leeto","17000973","geekytechiechic","hobo_take","RichishJain","tommy6073","ryo0111hk","isagi","iSuvm","RabbaniMuzakky","PremanshuPareek","NaveenEdala","MclDrew","furryronin","sac_180822","imasyou718","kiing_edy","tea_koshi","mikeattara","serial_chiller5","iHrishi_mane","MsMaverickk","hanacaraka","LagisquetB","kmelow1","LachlanEagling","ChetanT50970795","merci_good","vegaaSA","abba_xee","Anko1418","iliyasshahapure","SonOfAziza","moko__co","Yinkxz","frozencerebrum","root_ansh","Usheninte","arnay07"]';
+// // ["DashBarkHuss","Dominus_Kelvin","mahakothuri","furryronin","BillRobitskeJr","agatakozinska","wirtzdan","iameduardolopez","Kabuk1","EriPDev","antonioluisgil","IdrisDiba","simoncordova123","Bollybkampo","lksngy","wblancha","asucarlos1","Nanahawau__","M_sameer007","mowinik","its_kyle_yoo","RitaLeverett","mahamat_legrand","khip1994","FilipeEstacio","bio_kath","the_moisrex","sharifa_alabry","ev_burrell","0033Ricca","JenEColbert","AryanDadheech3","ibadi_1","mijoe","science_biatch","Cphoto21","naveddeshmukh","Robert_Elliott_","r4casper","sophiecantype","iameddieyayaya","walpolesj","RaahulIm","danijmoss","lomyenSEA","Piyush_0108","erol_aliyev","JKarena7","KharyaSahil","maheimaa","aid_jww","TheRohitDas","omprakash___","AlwinRivera","dan0mah","shuv1824","ekcenier","vivianychen","Dinesh48185069","IbrahimH_ss_n","camcodes","CJ71585025","sarabome","y_behailu","KristenTruempy","KaustubhMishal","CiccioAmato7","Usheninte","arpancodes","VarshitAgarwal2","Frunkul","moko__co","nikhiljain61019","techieEliot","notakshayb","thatCoding_Yogi","DedVampire","Koji_JUNIA","AdhithyanVijay","leeto","17000973","geekytechiechic","hobo_take","RichishJain","tommy6073","ryo0111hk","isagi","iSuvm","RabbaniMuzakky","PremanshuPareek","NaveenEdala","MclDrew","furryronin","sac_180822","imasyou718","kiing_edy","tea_koshi","mikeattara","serial_chiller5","iHrishi_mane","MsMaverickk","hanacaraka","LagisquetB","kmelow1","LachlanEagling","ChetanT50970795","merci_good","vegaaSA","abba_xee","Anko1418","iliyasshahapure","SonOfAziza","moko__co","Yinkxz","frozencerebrum","root_ansh","Usheninte","arnay07"]
+// // // "DashBarkHuss,Dominus_Kelvin,mahakothuri,furryronin,BillRobitskeJr,agatakozinska,wirtzdan,iameduardolopez,Kabuk1,EriPDev,antonioluisgil,IdrisDiba,simoncordova123,Bollybkampo,lksngy,wblancha,asucarlos1,Nanahawau__,M_sameer007,mowinik,its_kyle_yoo,RitaLeverett,mahamat_legrand,khip1994,FilipeEstacio,bio_kath,the_moisrex,sharifa_alabry,ev_burrell,0033Ricca,JenEColbert,AryanDadheech3,ibadi_1,mijoe,science_biatch,Cphoto21,naveddeshmukh,Robert_Elliott_,r4casper,sophiecantype,iameddieyayaya,walpolesj,RaahulIm,danijmoss,lomyenSEA,Piyush_0108,erol_aliyev,JKarena7,KharyaSahil,maheimaa,aid_jww,TheRohitDas,omprakash___,AlwinRivera,dan0mah,shuv1824,ekcenier,vivianychen,Dinesh48185069,IbrahimH_ss_n,camcodes,CJ71585025,sarabome,y_behailu,KristenTruempy,KaustubhMishal,CiccioAmato7,Usheninte,arpancodes,VarshitAgarwal2,Frunkul,moko__co,nikhiljain61019,techieEliot,notakshayb,thatCoding_Yogi,DedVampire,Koji_JUNIA,AdhithyanVijay,leeto,17000973,geekytechiechic,hobo_take,RichishJain,tommy6073,ryo0111hk,isagi,iSuvm,RabbaniMuzakky,PremanshuPareek,NaveenEdala,MclDrew,furryronin,sac_180822,imasyou718,kiing_edy,tea_koshi,mikeattara,serial_chiller5,iHrishi_mane,MsMaverickk,hanacaraka,LagisquetB,kmelow1,LachlanEagling,ChetanT50970795,merci_good,vegaaSA,abba_xee,Anko1418,iliyasshahapure,SonOfAziza,moko__co,Yinkxz,frozencerebrum,root_ansh,Usheninte,arnay07";
