@@ -8,7 +8,7 @@ let backFunction;
 let oneHundred; //better place to have this?
 let view0= function(){clearLayout(); mainEl.appendChild(startButton);};
 let currentView=0;
-const nextView = ()=>{currentView++; view[currentView]()};
+const nextView = ()=>{currentView++; view[currentView]()}; //edit for if first and last
 const backView = ()=>{currentView--; view[currentView]()};
 
 
@@ -17,7 +17,6 @@ mainEl.appendChild(startButton);
 
 const handler = (e)=>{
     if(e.target.id=="container") return;
-    console.log(e.target);
     
     if(e.target.className=="start") startHandler();
     if(e.target.className=="next") nextHandler();
@@ -33,13 +32,14 @@ const startHandler=()=>{
 }
 
 const nextHandler=()=>{
-    console.log("next");
-    console.log("currentview", currentView);
     nextView();
 }
 
 const view1 = ()=>{
     inputLayout("small");
+    const instrEl = document.querySelector(".instructions");
+    
+
 }
 
 
@@ -50,13 +50,13 @@ const view2 = ()=>{
     let search = new Search({since: oneHundred.startDate, range:0, num:[1]});
     let url = search.url(search.since, search.until, search.number);
     clearLayout();
-    linkLayout(url);
+    linkLayout(instructionText.view2[0], url);
     copyToClipboard(codeToCopy);
 }
 
 const view3 = ()=>{
     clearLayout();
-    inputLayout('large','screennames');
+    inputLayout('small','screennames');
 
 }
 const view4 = ()=>{
@@ -76,6 +76,12 @@ const view4 = ()=>{
     let url = search.url(search.since, search.until, search.number);
     linkLayout(url)
 }
+
+const view5= ()=>{
+    clearLayout();
+    inputLayout('small', "screennames");
+}
+
 const backHandler=()=>{
     console.log();
 }
@@ -94,10 +100,24 @@ const setFindInCommonCode = (screennames)=>{
     return code2;
 }
 
+let instructionText;
+   
+let xhr = new XMLHttpRequest();
 
+xhr.onload = function(){
+if(xhr.status >= 200 && xhr.status < 300){
+    console.log("success", xhr);
+    instructionText = JSON.parse(xhr.response);//doesn't work!
+}else{
+    console.log('The request failed!');
+}
+console.log('this always runs');
+}
+xhr.open('GET', 'instructions.json');
+xhr.send();
 //change this to event propogations since elements will be moving around?
 mainEl.addEventListener("click", handler);
-let view = [view0, view1, view2, view3, view4]
+let view = [view0, view1, view2, view3, view4, view5]
 
 //-------------------------------helpers----------------------------------------------------
 const datefromString=(str)=>{
@@ -106,7 +126,6 @@ const datefromString=(str)=>{
 
 //found this copy to clipboard snippet online
 const copyToClipboard = str => {
-    console.log(str);
     const el = document.createElement('textarea');  // Create a <textarea> element
     el.value = str;                                 // Set its value to the string that you want copied
     el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof

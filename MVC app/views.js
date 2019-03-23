@@ -53,8 +53,8 @@ const inputLayout = (...classNames)=>{
     mainEl.appendChild(back());
 }
 
-const linkLayout = (url)=>{
-    mainEl.appendChild(instructions());
+const linkLayout = (text, url)=>{
+    mainEl.appendChild(instructions(text));
     mainEl.appendChild(link(url, "search"));
     mainEl.appendChild(next());
     mainEl.appendChild(back());

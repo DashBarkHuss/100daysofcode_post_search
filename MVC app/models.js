@@ -14,7 +14,8 @@ class OneHundredCodeDays {
         return date;
     }
     numberOf(date){
-    return Math.floor((date-this.startDate)/86400000) + 1;
+    date.setHours(oneHundred.startDate.getHours(), oneHundred.startDate.getMinutes(), oneHundred.startDate.getSeconds(), oneHundred.startDate.getMilliseconds());
+    return Math.round((date-this.startDate)/86400000) + 1;
     }
     participants(participants){
         this.participants = [...participants];
@@ -103,3 +104,6 @@ class Search {
 // // mySetOf100.participants(["DashBarkHuss","Dominus_Kelvin","mahakothuri"]);
 
 // let search = new Search({since : mySetOf100.startDate, until: mySetOf100.dateOf(10), participants: mySetOf100.participants, num: [3,4]})
+
+// Sun Mar 10 2019 12:00:00 GMT-0500 (Central Daylight Time)
+// Sat Mar 09 2019 12:00:00 GMT-0600 (Central Standard Time)
