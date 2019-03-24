@@ -5,10 +5,19 @@
         "When twitter opens, <b>scroll all the way down</b> until all tweets are loaded.",
         "Open the <b>browser console</b> (On Windows and Linux: <b>Ctrl + Shift + J</b>. On Mac: <b>Cmd + Option + J</b>.)",
         "Press <b>paste</b> to put the code in the console", 
-        "Press <b>enter</b> to run the code. This code with automatically copy the screennames of the participants to your clipboard."],
+        "Press <b>enter</b> to run the code. This code with automatically copy the screennames of the participants to your clipboard."
+    ],
     "view3":[
         "Paste in the usernames that have been automatically copied to your clipboard."
-    ]
-
-
+    ],
+    "view4": [
+        "<b>Click the link<b> to copy the important code to your clipboard and open your twitter search.", 
+        "When twitter opens, <b>scroll all the way down</b> until all tweets are loaded.",
+        "Open the <b>browser console</b> (On Windows and Linux: <b>Ctrl + Shift + J</b>. On Mac: <b>Cmd + Option + J</b>.)",
+        "Press <b>paste</b> to put the code in the console", 
+        "Press <b>enter</b> to run the code. This code with automatically copy the screennames of the participants to your clipboard."
+    ],
+    "view5": ["Paste in the usernames that have been automatically copied to your clipboard."]
+    ,
+    "view6": ["To congradulate"]
 }
