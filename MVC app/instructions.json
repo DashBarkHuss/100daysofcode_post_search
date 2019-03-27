@@ -1,9 +1,9 @@
 {
     "view1":["When did you start 100 days of code? YYYY-MM-DD, include leading 0's."], 
     "view2":[
-        "<b>Click the link<b> to copy the important code to your clipboard and open your twitter search.", 
+        "<b>Click the link</b> to copy the important code to your clipboard and open your twitter search.", 
         "When twitter opens, <b>scroll all the way down</b> until all tweets are loaded.",
-        "Open the <b>browser console</b> (On Windows and Linux: <b>Ctrl + Shift + J</b>. On Mac: <b>Cmd + Option + J</b>.)",
+        "Open the <b>browser console</b> <ul><li>On Windows and Linux: <b>Ctrl + Shift + J</b></li> <li>On Mac: <b>Cmd + Option + J</b></li></ul>",
         "Press <b>paste</b> to put the code in the console", 
         "Press <b>enter</b> to run the code. This code with automatically copy the screennames of the participants to your clipboard."
     ],
@@ -11,7 +11,7 @@
         "Paste in the usernames that have been automatically copied to your clipboard."
     ],
     "view4": [
-        "<b>Click the link<b> to copy the important code to your clipboard and open your twitter search.", 
+        "<b>Click the link</b> which will automatically copy the important code to your clipboard and open your twitter search.", 
         "When twitter opens, <b>scroll all the way down</b> until all tweets are loaded.",
         "Open the <b>browser console</b> (On Windows and Linux: <b>Ctrl + Shift + J</b>. On Mac: <b>Cmd + Option + J</b>.)",
         "Press <b>paste</b> to put the code in the console", 
@@ -19,5 +19,5 @@
     ],
     "view5": ["Paste in the usernames that have been automatically copied to your clipboard."]
     ,
-    "view6": ["To congradulate"]
+    "view6": ["Encourage your fellow partipants, by tweeting at them!"]
 }

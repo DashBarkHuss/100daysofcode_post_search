@@ -3,17 +3,12 @@ const code1 = "tweets = document.querySelectorAll(\".tweet.js-stream-tweet:not(.
 const copyFunctionMin = 'copyToClipboard=e=>{const t=document.createElement("textarea");t.value=e,t.setAttribute("readonly",""),t.style.position="absolute",t.style.left="-9999px",document.body.appendChild(t);const o=document.getSelection().rangeCount>0&&document.getSelection().getRangeAt(0);t.select(),document.execCommand("copy"),document.body.removeChild(t),o&&(document.getSelection().removeAllRanges(),document.getSelection().addRange(o))};'
 
 let codeToCopy = copyFunctionMin + code1;
-let nextFunction;
-let backFunction;
 let oneHundred; //better place to have this?
-let view0= function(){clearLayout(); mainEl.appendChild(startButton);};
 let currentView=0;
 const nextView = ()=>{currentView++; view[currentView]()}; //edit for if first and last
 const backView = ()=>{currentView--; view[currentView]()};
 
 
-let startButton = start();
-mainEl.appendChild(startButton);
 
 const handler = (e)=>{
     if(e.target.id=="container") return;
@@ -25,6 +20,8 @@ const handler = (e)=>{
     
 }
 
+const view0 = ()=>{clearLayout(); mainEl.appendChild(start())};//hoisted
+
 const startHandler=()=>{
     //get rid of button
     clearLayout();
@@ -32,15 +29,44 @@ const startHandler=()=>{
 }
 
 const nextHandler=()=>{
+    //check if 
+    if (!validateForm()) return;
     nextView();
+}
+
+const validateForm = ()=>{
+    let input = document.querySelector("input");
+    if (input==null) return true;
+    input = input.value;
+    let valid=true;
+    switch (currentView) {
+        case 1:
+            if(input.match(/[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])/) == null){
+            alert("The date you entered does not match the format YYYY-MM-DD.");
+            valid = false;
+            }
+            break;
+        case (3 || 5):
+            if(input==""){
+                alert("Please plaste in the array that was auto-copied to your clipboard.");
+                valid = false;
+            }
+            break;
+        default:
+        valid = "true";
+            break;
+    }    
+    return valid;
+}
+
+const backHandler=()=>{
+    backView();
 }
 
 const view1 = ()=>{
     inputLayout("small");
     getInstructions();
 }
-
-
 
 const view2 = ()=>{
     let date = document.querySelector(".input").value;
@@ -49,7 +75,7 @@ const view2 = ()=>{
     let search = new Search({since: oneHundred.startDate, range:0, num:[1]});
     let url = search.url(search.since, search.until, search.number);
     clearLayout();
-    linkLayout(url);
+    linkLayout(url, "Copy Code & Search Twitter");
     getInstructions();
     copyToClipboard(codeToCopy);
 }
@@ -75,7 +101,7 @@ const view4 = ()=>{
 
     let search = new Search({since:yesterday, until: rightNow, num: range(oneHundred.numberOf(weekAgo), oneHundred.numberOf(yesterday))});
     let url = search.url(search.since, search.until, search.number);
-    linkLayout(url)
+    linkLayout(url, "Search")
     getInstructions();
 }
 
@@ -87,14 +113,14 @@ const view5= ()=>{
 
 const view6= ()=>{
     const peopleLeft = JSON.parse(document.querySelector(".input").value);
+    const mentions = mention(peopleLeft).join("<br>");
+    const date = (oneHundred.startDate.getMonth()+1)+"/"+oneHundred.startDate.getDate()+"/"+oneHundred.startDate.getFullYear();
+    const url = tweetURL(date, mentions);
     clearLayout();
-    linkLayout();
+    linkLayout(url, "Tweet");
     getInstructions();
 }
 
-const backHandler=()=>{
-    console.log();
-}
 const getInstructions=()=>{
     const instrEl = document.querySelector(".instructions");
     const items = instructionsText!=undefined? instructionsText["view"+currentView].map(x=> `<li>${x}</li>`).join("") : "Instructions didn't load: "+"view" +currentView;
@@ -115,6 +141,24 @@ const setFindInCommonCode = (screennames)=>{
 }
 
 const mention = (screennames)=>(screennames.map(x=>`@${x}`));
+
+//class????
+const tweetURL = (date, mentions)=>{
+    let tweet;
+    // const brToSpace() = 
+    // if(mentions.replace(/(<br>)/g, '%0A').length>280){}
+    // tweet = `Great job<br>${mentions}Going strong since ${date}`
+    tweet = `Great job to those who started #100DaysOfCode on ${date} and are still going strong:<br>${mentions}`
+    let url = `https://twitter.com/home?status=${tweet}`;
+    // const length = tw.replace(/(<br>)/g, '%0A').length;
+    // if (length>280){
+    //     return "Tweet too Long"
+    // }
+
+    url = url.replace(/[#]/g, '%23').replace(/(<br>)/g, '%0A');
+
+    return url;
+}
 
 let instructionsText  = null;
 fetch('instructions.json')
@@ -143,7 +187,8 @@ fetch('instructions.json')
 
 //change this to event propogations since elements will be moving around?
 mainEl.addEventListener("click", handler);
-let view = [view0, view1, view2, view3, view4, view5]
+let view = [view0, view1, view2, view3, view4, view5, view6]
+view0();
 
 //-------------------------------helpers----------------------------------------------------
 const datefromString=(str)=>{
@@ -177,7 +222,7 @@ const range = (start, end)=>[...Array(end-start+1).keys()].map(x=>x+start);
 
 //------------------ test
 const peopleStartArray = '["DashBarkHuss","Dominus_Kelvin","mahakothuri","furryronin","BillRobitskeJr","agatakozinska","wirtzdan","iameduardolopez","Kabuk1","EriPDev","antonioluisgil","IdrisDiba","simoncordova123","Bollybkampo","lksngy","wblancha","asucarlos1","Nanahawau__","M_sameer007","mowinik","its_kyle_yoo","RitaLeverett","mahamat_legrand","khip1994","FilipeEstacio","bio_kath","the_moisrex","sharifa_alabry","ev_burrell","0033Ricca","JenEColbert","AryanDadheech3","ibadi_1","mijoe","science_biatch","Cphoto21","naveddeshmukh","Robert_Elliott_","r4casper","sophiecantype","iameddieyayaya","walpolesj","RaahulIm","danijmoss","lomyenSEA","Piyush_0108","erol_aliyev","JKarena7","KharyaSahil","maheimaa","aid_jww","TheRohitDas","omprakash___","AlwinRivera","dan0mah","shuv1824","ekcenier","vivianychen","Dinesh48185069","IbrahimH_ss_n","camcodes","CJ71585025","sarabome","y_behailu","KristenTruempy","KaustubhMishal","CiccioAmato7","Usheninte","arpancodes","VarshitAgarwal2","Frunkul","moko__co","nikhiljain61019","techieEliot","notakshayb","thatCoding_Yogi","DedVampire","Koji_JUNIA","AdhithyanVijay","leeto","17000973","geekytechiechic","hobo_take","RichishJain","tommy6073","ryo0111hk","isagi","iSuvm","RabbaniMuzakky","PremanshuPareek","NaveenEdala","MclDrew","furryronin","sac_180822","imasyou718","kiing_edy","tea_koshi","mikeattara","serial_chiller5","iHrishi_mane","MsMaverickk","hanacaraka","LagisquetB","kmelow1","LachlanEagling","ChetanT50970795","merci_good","vegaaSA","abba_xee","Anko1418","iliyasshahapure","SonOfAziza","moko__co","Yinkxz","frozencerebrum","root_ansh","Usheninte","arnay07"]';
-const peopleLeftArray = '["DashBarkHuss","mahakothuri","wirtzdan","mahamat_legrand","walpolesj","ev_burrell","ryo0111hk","walpolesj"]';
+const peopleLeftArray = '["DashBarkHuss", "boobieboy"]';
 startHandler();
 document.querySelector(".input").value = "2019-01-01";
 nextHandler();

@@ -39,7 +39,7 @@ const back = ()=>(elWithClass("button", "back"));
 //link
 
 const link = (url, text)=>{
-    let el = elWithClass("button", "dateLink");
+    let el = elWithClass("button", "link");
     el.innerHTML= `<a href ="${url}" target="_blank">${text}</a>`;
     return el;  
 };
@@ -53,9 +53,9 @@ const inputLayout = (...classNames)=>{
     mainEl.appendChild(back());
 }
 
-const linkLayout = (url)=>{
+const linkLayout = (url, text)=>{
     mainEl.appendChild(instructions());
-    mainEl.appendChild(link(url, "search"));
+    mainEl.appendChild(link(url, text));
     mainEl.appendChild(next());
     mainEl.appendChild(back());
 }
