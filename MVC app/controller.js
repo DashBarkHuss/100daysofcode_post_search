@@ -98,8 +98,13 @@ const view4 = ()=>{
     yesterday.setDate(rightNow.getDate()-1);
     let weekAgo = new Date();
     weekAgo.setDate(rightNow.getDate()-7);
+//test
+    let yesterday2 = new Date();
+    yesterday2.setDate(yesterday.getDate() - 1)
+    let search = new Search({since:yesterday2, until: yesterday, num: range(oneHundred.numberOf(weekAgo), oneHundred.numberOf(yesterday))});
 
-    let search = new Search({since:yesterday, until: rightNow, num: range(oneHundred.numberOf(weekAgo), oneHundred.numberOf(yesterday))});
+
+    //let search = new Search({since:yesterday, until: rightNow, num: range(oneHundred.numberOf(weekAgo), oneHundred.numberOf(yesterday))});
     let url = search.url(search.since, search.until, search.number);
     linkLayout(url, "Search")
     getInstructions();
@@ -112,7 +117,8 @@ const view5= ()=>{
 }
 
 const view6= ()=>{
-    const peopleLeft = JSON.parse(document.querySelector(".input").value);
+    let peopleLeft = JSON.parse(document.querySelector(".input").value);
+    peopleLeft = uniqueInArray(peopleLeft);
     const mentions = mention(peopleLeft).join("<br>");
     const date = (oneHundred.startDate.getMonth()+1)+"/"+oneHundred.startDate.getDate()+"/"+oneHundred.startDate.getFullYear();
     const url = tweetURL(date, mentions);
@@ -221,16 +227,18 @@ const uniqueInArray = (arr)=>(arr.filter((x,i)=> arr.indexOf(x)>=i));
 const range = (start, end)=>[...Array(end-start+1).keys()].map(x=>x+start);
 
 //------------------ test
-// const peopleStartArray = '["DashBarkHuss","Dominus_Kelvin","mahakothuri","furryronin","BillRobitskeJr","agatakozinska","wirtzdan","iameduardolopez","Kabuk1","EriPDev","antonioluisgil","IdrisDiba","simoncordova123","Bollybkampo","lksngy","wblancha","asucarlos1","Nanahawau__","M_sameer007","mowinik","its_kyle_yoo","RitaLeverett","mahamat_legrand","khip1994","FilipeEstacio","bio_kath","the_moisrex","sharifa_alabry","ev_burrell","0033Ricca","JenEColbert","AryanDadheech3","ibadi_1","mijoe","science_biatch","Cphoto21","naveddeshmukh","Robert_Elliott_","r4casper","sophiecantype","iameddieyayaya","walpolesj","RaahulIm","danijmoss","lomyenSEA","Piyush_0108","erol_aliyev","JKarena7","KharyaSahil","maheimaa","aid_jww","TheRohitDas","omprakash___","AlwinRivera","dan0mah","shuv1824","ekcenier","vivianychen","Dinesh48185069","IbrahimH_ss_n","camcodes","CJ71585025","sarabome","y_behailu","KristenTruempy","KaustubhMishal","CiccioAmato7","Usheninte","arpancodes","VarshitAgarwal2","Frunkul","moko__co","nikhiljain61019","techieEliot","notakshayb","thatCoding_Yogi","DedVampire","Koji_JUNIA","AdhithyanVijay","leeto","17000973","geekytechiechic","hobo_take","RichishJain","tommy6073","ryo0111hk","isagi","iSuvm","RabbaniMuzakky","PremanshuPareek","NaveenEdala","MclDrew","furryronin","sac_180822","imasyou718","kiing_edy","tea_koshi","mikeattara","serial_chiller5","iHrishi_mane","MsMaverickk","hanacaraka","LagisquetB","kmelow1","LachlanEagling","ChetanT50970795","merci_good","vegaaSA","abba_xee","Anko1418","iliyasshahapure","SonOfAziza","moko__co","Yinkxz","frozencerebrum","root_ansh","Usheninte","arnay07"]';
+const peopleStartArray = '["DashBarkHuss","Dominus_Kelvin","mahakothuri","furryronin","BillRobitskeJr","agatakozinska","wirtzdan","iameduardolopez","Kabuk1","EriPDev","antonioluisgil","IdrisDiba","simoncordova123","Bollybkampo","lksngy","wblancha","asucarlos1","Nanahawau__","M_sameer007","mowinik","its_kyle_yoo","RitaLeverett","mahamat_legrand","khip1994","FilipeEstacio","bio_kath","the_moisrex","sharifa_alabry","ev_burrell","0033Ricca","JenEColbert","AryanDadheech3","ibadi_1","mijoe","science_biatch","Cphoto21","naveddeshmukh","Robert_Elliott_","r4casper","sophiecantype","iameddieyayaya","walpolesj","RaahulIm","danijmoss","lomyenSEA","Piyush_0108","erol_aliyev","JKarena7","KharyaSahil","maheimaa","aid_jww","TheRohitDas","omprakash___","AlwinRivera","dan0mah","shuv1824","ekcenier","vivianychen","Dinesh48185069","IbrahimH_ss_n","camcodes","CJ71585025","sarabome","y_behailu","KristenTruempy","KaustubhMishal","CiccioAmato7","Usheninte","arpancodes","VarshitAgarwal2","Frunkul","moko__co","nikhiljain61019","techieEliot","notakshayb","thatCoding_Yogi","DedVampire","Koji_JUNIA","AdhithyanVijay","leeto","17000973","geekytechiechic","hobo_take","RichishJain","tommy6073","ryo0111hk","isagi","iSuvm","RabbaniMuzakky","PremanshuPareek","NaveenEdala","MclDrew","furryronin","sac_180822","imasyou718","kiing_edy","tea_koshi","mikeattara","serial_chiller5","iHrishi_mane","MsMaverickk","hanacaraka","LagisquetB","kmelow1","LachlanEagling","ChetanT50970795","merci_good","vegaaSA","abba_xee","Anko1418","iliyasshahapure","SonOfAziza","moko__co","Yinkxz","frozencerebrum","root_ansh","Usheninte","arnay07"]';
 // const peopleLeftArray = '["DashBarkHuss", "boobieboy"]';
-// startHandler();
-// document.querySelector(".input").value = "2019-01-01";
-// nextHandler();
-// nextHandler();
-// document.querySelector(".input").value = peopleStartArray;
-// nextHandler();
-// nextHandler();
-// document.querySelector(".input").value = peopleLeftArray;
+//const peopleLeftArray = '["devgupta2607","BeaufortAustin","kiing_edy","wirtzdan","mahakothuri","ev_burrell","CiccioAmato7","DashBarkHuss","megane_ayn","ugly_code","AureliaSpecker","Violet_Figueroa","LeeGainer","LagisquetB","writeens","sirocco_kukri","yuj_3","T_W_H_R_C","hiro_16_18","ct_sci","Chusotuengineer","erickcookie","btmccollum","Nadina_codes","SouthSideCoder","CodeRunGeek","scmCodes","meg_gutshall","ananoterminal"]';
+const peopleLeftArray = '["wirtzdan","mahakothuri","ev_burrell","kiing_edy","CiccioAmato7","DashBarkHuss","hanacaraka","hanacaraka","ryo0111hk","mahamat_legrand","hanacaraka","mahakothuri"]';
+startHandler();
+document.querySelector(".input").value = "2019-01-01";
+nextHandler();
+nextHandler();
+document.querySelector(".input").value = peopleStartArray;
+nextHandler();
+nextHandler();
+document.querySelector(".input").value = peopleLeftArray;
 
 
 // // ["DashBarkHuss","Dominus_Kelvin","mahakothuri","furryronin","BillRobitskeJr","agatakozinska","wirtzdan","iameduardolopez","Kabuk1","EriPDev","antonioluisgil","IdrisDiba","simoncordova123","Bollybkampo","lksngy","wblancha","asucarlos1","Nanahawau__","M_sameer007","mowinik","its_kyle_yoo","RitaLeverett","mahamat_legrand","khip1994","FilipeEstacio","bio_kath","the_moisrex","sharifa_alabry","ev_burrell","0033Ricca","JenEColbert","AryanDadheech3","ibadi_1","mijoe","science_biatch","Cphoto21","naveddeshmukh","Robert_Elliott_","r4casper","sophiecantype","iameddieyayaya","walpolesj","RaahulIm","danijmoss","lomyenSEA","Piyush_0108","erol_aliyev","JKarena7","KharyaSahil","maheimaa","aid_jww","TheRohitDas","omprakash___","AlwinRivera","dan0mah","shuv1824","ekcenier","vivianychen","Dinesh48185069","IbrahimH_ss_n","camcodes","CJ71585025","sarabome","y_behailu","KristenTruempy","KaustubhMishal","CiccioAmato7","Usheninte","arpancodes","VarshitAgarwal2","Frunkul","moko__co","nikhiljain61019","techieEliot","notakshayb","thatCoding_Yogi","DedVampire","Koji_JUNIA","AdhithyanVijay","leeto","17000973","geekytechiechic","hobo_take","RichishJain","tommy6073","ryo0111hk","isagi","iSuvm","RabbaniMuzakky","PremanshuPareek","NaveenEdala","MclDrew","furryronin","sac_180822","imasyou718","kiing_edy","tea_koshi","mikeattara","serial_chiller5","iHrishi_mane","MsMaverickk","hanacaraka","LagisquetB","kmelow1","LachlanEagling","ChetanT50970795","merci_good","vegaaSA","abba_xee","Anko1418","iliyasshahapure","SonOfAziza","moko__co","Yinkxz","frozencerebrum","root_ansh","Usheninte","arnay07"]
